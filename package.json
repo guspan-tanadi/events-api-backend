@@ -4,9 +4,12 @@
   "main": "app.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start:prod": "node dist/app.js",
     "dev": "ts-node src/app.ts",
-    "test": "jest"
+    "test": "jest",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
