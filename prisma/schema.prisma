@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multischema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["minpro"]
+}
+
+model Users {
+  user_id       Int      @id @default(autoincrement())
+  username      String   @unique @db.VarChar(50)
+  password      String   
+  email         String   @unique @db.VarChar(50)
+  fullname      String   @db.VarChar(50)
+  role          Role 
+  // role perlu diubah dari enum ke string, kiranya bagaimana?
+  refresh_token String?
+  oauth_token   String?
+  created_at    DateTime @default(now())
+
+  Registrations Registrations[]
+  Reviews       Reviews[]
+
+  @@schema("minpro")
+}
+
+model Events {
+  event_id         Int      @id @default(autoincrement())
+  event_title      String   @db.VarChar(32)
+  description      String   @db.VarChar(1024)
+  category         Category
+  price            Decimal  @db.Decimal(10, 2)
+  discounted_price Decimal  @db.Decimal(10, 2)
+  is_free          Boolean
+  date             DateTime
+  time             DateTime
+  location         String   @db.VarChar(256)
+  seat_quantity    Int
+  image_url        String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  Registrations Registrations[]
+  Discounts     Discounts[]
+
+  @@schema("minpro")
+}
+
+model Registrations {
+  registration_id     Int                @id @default(autoincrement())
+  user_id             Int
+  event_id            Int
+  quantity            Int
+  registration_date   DateTime           @default(now())
+  registration_status RegistrationStatus
+
+  User     Users      @relation(fields: [user_id], references: [user_id])
+  Event    Events     @relation(fields: [event_id], references: [event_id])
+  Payments Payments[]
+  Reviews  Reviews[]
+
+  @@schema("minpro")
+}
+
+model Payments {
+  payment_id      Int           @id @default(autoincrement())
+  registration_id Int           @unique
+  amount          Decimal       @db.Decimal(10, 2)
+  payment_status  PaymentStatus @default(PENDING)
+  payment_method  PaymentMethod @default(QRIS)
+  payment_date    DateTime?      
+
+  Registration Registrations @relation(fields: [registration_id], references: [registration_id])
+
+  @@schema("minpro")
+}
+
+model Reviews {
+  review_id       Int      @id @default(autoincrement())
+  registration_id Int      @unique
+  user_id         Int
+  rating          Int
+  comment         String   @db.VarChar(256)
+  created_at      DateTime @default(now())
+
+  Registration Registrations @relation(fields: [registration_id], references: [registration_id])
+  User         Users         @relation(fields: [user_id], references: [user_id])
+
+  @@schema("minpro")
+}
+
+model Discounts {
+  discount_id         Int      @id @default(autoincrement())
+  event_id            Int
+  discount_percentage Decimal  @db.Decimal(10, 2)
+  start_date          DateTime
+  end_date            DateTime
+
+  Event Events @relation(fields: [event_id], references: [event_id])
+
+  @@schema("minpro")
+}
+
+enum Role {
+  ADMIN
+  USER
+
+  @@schema("minpro")
+}
+
+enum Category {
+  MUSIC
+  SPORTS
+  EDUCATION
+  TECHNOLOGY
+
+  @@schema("minpro")
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  ATTENDED
+
+  @@schema("minpro")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+
+  @@schema("minpro")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  QRIS
+  BANK_TRANSFER
+
+  @@schema("minpro")
+}
