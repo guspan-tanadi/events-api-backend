@@ -2,7 +2,7 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "https://raw.githubusercontent.com/guspan-tanadi/events-api-backend/refs/heads/master/uploads/");
   },
   filename: (req, file, cb) => {/*
     cb(null, `${Date.now()} - ${file.originalname}`);*/
