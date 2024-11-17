@@ -12,12 +12,12 @@ import userRouter from "./routers/user.router";
 environment.config();
 
 const app = express();
-const PORT = process.env.SERVER_PORT_DEV;
+const PORT = process.env.SERVER_PORT_DEV || 8000;
 
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://idham-gilang-events-api.vercel.app",
   })
 );
 
