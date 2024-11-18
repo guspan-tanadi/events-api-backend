@@ -17,9 +17,7 @@ const PORT = process.env.SERVER_PORT_DEV || 8000;
 app.use(express.json());
 app.use(
   cors({
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    origin: ["https://event-idham-gilang.vercel.app", "http://localhost:3000"]
+    origin: "https://event-idham-gilang.vercel.app"
   })
 );
 
