@@ -17,7 +17,7 @@ const PORT = process.env.SERVER_PORT_DEV || 8000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://event-idham-gilang.vercel.app"
+    origin: "https://idham-gilang-web-events.vercel.app"
   })
 );
 
@@ -26,7 +26,7 @@ app.use("/api/admin", adminRouter);
 
 app.use("/api/user", userRouter);
 
-app.use("/api/auth/", authRouter)
+app.use("/api/auth", authRouter)
 
 
 app.listen(PORT, () => {
