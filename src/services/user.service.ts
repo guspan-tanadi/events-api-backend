@@ -40,7 +40,7 @@ export class UserService {
           contains: location,
           mode: "insensitive",
         },
-      },
+      }
     });
   }
 

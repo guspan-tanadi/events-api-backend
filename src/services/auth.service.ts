@@ -18,6 +18,9 @@ export class AuthService {
     }
 
     async register(data: { username: string; fullname: string; email: string; password: string; role: "ADMIN" | "USER"; }) {
+        if (data.role === "ADMIN") {
+            return Promise.reject(new Error("Cannot register as admin"))
+        }
         const validatedData = registerSchema.parse(data);
         const hashedPassword = await bcrypt.hash(data.password, 10); // Use 10 rounds
         return this.prisma.users.create({

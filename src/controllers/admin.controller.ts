@@ -61,7 +61,7 @@ export class AdminController {
         seat_quantity
       } = req.body;   
 
-      console.log(req.body);
+      // console.log(req.body);
 
       const image = (req as any).file?.path || "";
 

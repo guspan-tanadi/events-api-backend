@@ -27,29 +27,32 @@ export class AuthController {
           refreshToken: refreshToken,
         },
       });
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as Error;
       res.status(400).send({
         message: "Failed to login, user not found",
         status: res.statusCode,
-        detail: error.errors
+        detail: res.statusMessage
       });
     }
   }
 
   async register(req: Request, res: Response) {
-    console.log(req.body);
+    // console.log(req.body);
     try {
       const user: Auth = req.body;
       const data = await this.authService.register(user);
-      console.log("Data: ", data);
+      // console.log("Data: ", data);
       res.status(201).send({
         message: "Successfully register",
         status: res.statusCode,
       });
-    } catch (error: any) {
+    } catch (error) {
+       const err = error as Error
       res.status(400).send({
-        message: `failed to register: ${error.errors}`,
+        message: `failed to register: ${err.message}`,
         status: res.statusCode,
+        detail: res.statusMessage
       });
     }
     // const user: Auth = req.body;
