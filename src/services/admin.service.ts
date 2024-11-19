@@ -98,6 +98,24 @@ export class AdminService {
   }
 
   async deleteEvent(event_id: number) {
+    await this.prisma.reviews.deleteMany({
+      where: {
+        Registration: {
+          event_id: event_id
+        }
+      }
+    })
+    await this.prisma.payments.deleteMany({
+      where: {
+        Registration: {
+          event_id: event_id
+        }
+      }
+    })
+    await this.prisma.registrations.deleteMany({
+      where: {event_id: event_id}
+    })
+
     await this.prisma.discounts.deleteMany({
       where: { event_id },
     });

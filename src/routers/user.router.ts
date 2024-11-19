@@ -28,6 +28,7 @@ router.get(
   "/registrations/:id",
   authenticateJwt.authenticateJwt.bind(authenticateJwt),
   authenticateJwt.authorizeRole("USER").bind(authenticateJwt),
+  authenticateJwt.authorizeUserId().bind(authenticateJwt),
   userController.getRegistrationByUserId.bind(userController)
 );
 router.get(
